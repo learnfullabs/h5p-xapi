@@ -1,0 +1,27 @@
+{
+    "name": "learnfullabs/h5p-xapi",
+    "type": "drupal-custom-module",
+    "keywords": ["Drupal"],
+    "description": "Allows capturing the H5P XAPI Event Statements in the DB for further processing",
+    "homepage": "https://github.com/learnfullabs/h5p-xapi",
+    "authors": [
+      {
+        "name": "Daniel Rodriguez",
+        "homepage": "https://www.drupal.org/u/danrod",
+        "role": "Maintainer"
+      }
+    ],
+    "support": {
+        "issues": "https://github.com/learnfullabs/h5p-xapi/issues",
+        "source": "https://github.com/learnfullabs/h5p-xapi"
+    },
+    "license": "GPL-2.0-or-later",
+    "minimum-stability": "dev",
+    "require": {
+      "drupal/core": "^10"
+    },
+    "require-dev": {
+      "drupal/group": "^3.2",
+      "drupal/key": "^1.17"
+    }
+  }
