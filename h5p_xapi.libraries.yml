@@ -1,0 +1,9 @@
+listener:
+  js:
+    js/h5p-xapi.js: {}
+  css:
+    theme:
+      css/h5p-xapi.css: {}
+  dependencies:
+    - core/jquery
+    - core/drupal

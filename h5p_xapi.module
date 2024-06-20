@@ -4,3 +4,12 @@
  * @file
  * Saves the H5P XAPI Event Statements.
  */
+
+ /**
+ * Implements hook_page_attachments().
+ *
+ * Add Quiz CSS to all pages.
+ */
+function quiz_page_attachments(&$page) {
+  $page['#attached']['library'][] = 'h5p-xapi/listener';
+}
