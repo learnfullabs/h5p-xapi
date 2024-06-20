@@ -13,10 +13,13 @@
       elements.forEach(function(index){
         console.log("Test Load");
         let userId = drupalSettings.h5pxapi.userId;
+        let nodeId = drupalSettings.h5pxapi.nodeId;
+
+        console.log(userId);
+        console.log(nodeId);
 
         H5P.externalDispatcher.on('xAPI', function (event) {
           console.log(event.data.statement);
-          console.log(userId);
         });
       });
     }

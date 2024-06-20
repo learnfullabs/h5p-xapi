@@ -2,27 +2,29 @@
 
 namespace Drupal\h5p_xapi\Plugin\rest\resource;
 
+use Psr\Log\LoggerInterface;
 use Drupal\rest\Plugin\ResourceBase;
 use Drupal\rest\ResourceResponse;
+use Drupal\Core\Language\LanguageDefault;
+use Drupal\Core\Session\AccountInterface;
 use Drupal\Core\Session\AccountProxyInterface;
-use Psr\Log\LoggerInterface;
+use Drupal\Core\Entity\EntityStorageException;
+use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Symfony\Component\DependencyInjection\ContainerInterface;
 use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Drupal\rest\ModifiedResourceResponse;
 
 /**
  * Provides a Save Events User Endpoint
  * 
- * Returns a Group object (the course) identified by the id {orgUnitId}
- * this Group object contains a set of student objects who belong to that 
- * course, or returns an error message/empty array otherwise.
- * 
  * @RestResource(
  *   id = "h5p_xapi_save_events_user",
- *   label = @Translation("H5P XAPI Save Events User"),
+ *   label = @Translation("H5P XAPI Save Events User API"),
  *   serialization_class = "",
  *   uri_paths = {
- *     "canonical" = "/h5p-xapi/save-events-user"
+ *     "create" = "/h5p-xapi/save-events-user"
  *   }
  * )
  */
@@ -34,6 +36,13 @@ class H5PXAPISaveEventsUser extends ResourceBase {
    * @var \Drupal\Core\Session\AccountProxyInterface
    */
   protected $currentUser;
+
+  /**
+   * The entity type manager.
+   *
+   * @var \Drupal\Core\Entity\EntityTypeManagerInterface
+   */
+  protected $entityTypeManager;
 
   /**
    * Constructs a Drupal\rest\Plugin\ResourceBase object.
@@ -50,10 +59,13 @@ class H5PXAPISaveEventsUser extends ResourceBase {
    *   A logger instance.
    * @param \Drupal\Core\Session\AccountProxyInterface $current_user
    *   A current user instance.
+   * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
+   *   The entity type manager.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, AccountProxyInterface $current_user) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, AccountProxyInterface $current_user, EntityTypeManagerInterface $entity_type_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->currentUser = $current_user;
+    $this->entityTypeManager = $entity_type_manager;
   }
 
   /**
@@ -66,14 +78,15 @@ class H5PXAPISaveEventsUser extends ResourceBase {
       $plugin_definition,
       $container->getParameter('serializer.formats'),
       $container->get('logger.factory')->get('custom_rest'),
-      $container->get('current_user')
+      $container->get('current_user'),
+      $container->get('entity_type.manager'),
     );
   }
 
   /**
    * Responds to POST requests.
    *
-   * Returns a list of bundles for specified entity.
+   * Saves H5P XAPI data when user interacts with the H5P Resource
    *
    * @throws \Symfony\Component\HttpKernel\Exception\HttpException
    *   Throws exception expected.
@@ -94,6 +107,35 @@ class H5PXAPISaveEventsUser extends ResourceBase {
       throw new BadRequestHttpException('Bad data format. Please make sure you have all data set in the request.');
     }
 
+    /* Check if node_id corresponds to an existing H5P Resource */
+    $h5p_resource = $this->entityTypeManager->getStorage('node')->load($data["node_id"]);
+
+    if (empty($h5p_resource)) {
+      throw new BadRequestHttpException('H5P Resource does not exist, check your node_id.');
+    } else {
+      if ($h5p_resource->bundle() != "h5p") {
+        throw new BadRequestHttpException('The node_id supplier does not correspond to an H5P Resource, check your node_id.');
+      }
+    }
+
+    /* Check if user_id corresponds to an existing User */
+    $user_storage = $this->entityTypeManager->getStorage('user');
+
+    $user_ids = $user_storage->getQuery()
+          ->accessCheck(FALSE)
+          ->condition('uid', $data['user_id'])
+          ->execute();
+
+    if (count($user_ids) < 1) {
+      throw new BadRequestHttpException('User does not exist, check your user_id.');
+    }
+
+    $user_id = $data['user_id'];
+    $node_id = $data['node_id'];
+
+    /* At this point we can process the data */
+    file_put_contents("/tmp/inputdata-" . $user_id . "-" . $node_id, json_encode($data["h5p_event"]));
+    
     $response = new ResourceResponse($response_status);
 
     return $response;
