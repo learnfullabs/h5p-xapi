@@ -8,10 +8,16 @@
 
   Drupal.behaviors.blockClass = {
     attach: function (context, settings) {
-      console.log("Test Load");
-      console.log(drupalSettings.h5pxapi.userId);
-      H5P.externalDispatcher.on('xAPI', function (event) {
-        console.log(event.data.statement);
+      const elements = once('wrapped', '.h5p-iframe-wrapper', context);
+
+      elements.forEach(function(index){
+        console.log("Test Load");
+        let userId = drupalSettings.h5pxapi.userId;
+
+        H5P.externalDispatcher.on('xAPI', function (event) {
+          console.log(event.data.statement);
+          console.log(userId);
+        });
       });
     }
   };

@@ -2,7 +2,6 @@ name: H5P XAPI
 description: Allows capturing the H5P XAPI Event Statements in the DB for further processing
 package: H5P
 type: module
-version: 1.0
 core_version_requirement: ^9.5 || ^10
 dependencies:
   - 'drupal:h5p'

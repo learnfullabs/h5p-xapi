@@ -1,0 +1,10 @@
+id: h5p_xapi_save_events_user
+granularity: resource
+configuration:
+  methods:
+    - POST
+  formats:
+    - json
+  authentication:
+    - basic_auth
+    - cookie
