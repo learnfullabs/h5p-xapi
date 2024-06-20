@@ -14,9 +14,27 @@
  */
 function h5p_xapi_page_attachments(&$page) {
   $node = \Drupal::routeMatch()->getParameter('node');
+  
   if ($node instanceof \Drupal\node\NodeInterface) {
     if ($node->bundle() == "h5p") {
       $page['#attached']['library'][] = 'h5p_xapi/listener';
+
+      // Create a JS Setting for the User ID
     }
   }
+}
+
+/**
+ * Implements template_preprocess_page().
+ * 
+ * Creates a few JS Settings to use in the h5p-xapi file
+ */
+function h5p_xapi_preprocess_page(&$variables) {
+  // Create a JS Setting for the User ID
+  $user = \Drupal::currentUser();
+
+  $variables['#attached']['drupalSettings']['h5pxapi']['userId'] = $user->id();
+
+  $variables['page']['#cache']['contexts'][] = 'h5pxapi';
+  $variables['page']['#cache']['contexts'][] = 'url';
 }

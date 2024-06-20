@@ -9,6 +9,7 @@
   Drupal.behaviors.blockClass = {
     attach: function (context, settings) {
       console.log("Test Load");
+      console.log(drupalSettings.h5pxapi.userId);
     }
   };
 })(jQuery, Drupal, drupalSettings);
