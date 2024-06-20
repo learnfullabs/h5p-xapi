@@ -5,11 +5,18 @@
  * Saves the H5P XAPI Event Statements.
  */
 
+ use \Drupal\Core\Entity\EntityInterface;
+
  /**
  * Implements hook_page_attachments().
  *
- * Add Quiz CSS to all pages.
+ * Add H5P XAPI libraries to H5P Resource nodes only.
  */
 function h5p_xapi_page_attachments(&$page) {
-  $page['#attached']['library'][] = 'h5p-xapi/listener';
+  $node = \Drupal::routeMatch()->getParameter('node');
+  if ($node instanceof \Drupal\node\NodeInterface) {
+    if ($node->bundle() == "h5p") {
+      $page['#attached']['library'][] = 'h5p_xapi/listener';
+    }
+  }
 }
