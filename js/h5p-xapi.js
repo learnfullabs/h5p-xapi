@@ -10,6 +10,9 @@
     attach: function (context, settings) {
       console.log("Test Load");
       console.log(drupalSettings.h5pxapi.userId);
+      H5P.externalDispatcher.on('xAPI', function (event) {
+        console.log(event.data.statement);
+      });
     }
   };
 })(jQuery, Drupal, drupalSettings);
