@@ -6,3 +6,5 @@ version: 1.0
 core_version_requirement: ^9.5 || ^10
 dependencies:
   - 'drupal:h5p'
+  - 'drupal:restui'
+  - 'drupal:serialization'
