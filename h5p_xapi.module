@@ -10,6 +10,6 @@
  *
  * Add Quiz CSS to all pages.
  */
-function quiz_page_attachments(&$page) {
+function h5p_xapi_page_attachments(&$page) {
   $page['#attached']['library'][] = 'h5p-xapi/listener';
 }
