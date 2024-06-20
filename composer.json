@@ -22,6 +22,7 @@
     },
     "require-dev": {
       "drupal/group": "^3.2",
-      "drupal/key": "^1.17"
+      "drupal/key": "^1.17",
+      "drupal/restui": "^1.21"
     }
   }
