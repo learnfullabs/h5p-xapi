@@ -17,8 +17,6 @@
         H5P.externalDispatcher.on('xAPI', function (event) {
           /* TODO
            *
-           * - make a fetch call to send a POST request to /h5p-xapi/save-events-user
-           * - check for errors and other exceptions 
            * - OPTIONAL: to parse the event.data.statement object before sending it */
           let data = {
             user_id: userId,
@@ -36,7 +34,7 @@
           fetch("/h5p-xapi/save-events-user?_format=json", {
             body: JSON.stringify(data),
             headers: {
-              "Authorization": "Basic ZGFucm9kdGVzdDp0ZXN0MTE=",
+              "Authorization": "#",
               "Content-Type": "application/json",
               "X-Csrf-Token": "QqwBBvo2rvacoaJjSGOxrfjklStTw2wqLMsYgHkaetI"
             },
