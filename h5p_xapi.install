@@ -34,7 +34,7 @@ function h5p_xapi_schema() {
       ],
       'event_data' => [
         'description' => 'The user id (uid) of the user who is interacting with the H5P resource and emits the events.',
-        'type' => 'blob',
+        'type' => 'text',
         'size' => 'big',
         'not null' => TRUE,
       ],
