@@ -23,26 +23,44 @@
             node_id: nodeId,
             h5p_event: event.data.statement
           };
-
+      
           /* TODO
            * 
-           * - Check for errors, success values, and return values also
-           * - Make a fetch() call to /session/token' save the return value somehow 
-           * - use that value in the X-Csrf-Token header value
            * - Get session cookie (somehow)
            * - Change "Authorization" to "Cookie" */
-          fetch("/h5p-xapi/save-events-user?_format=json", {
-            body: JSON.stringify(data),
-            headers: {
-              "Authorization": "#",
-              "Content-Type": "application/json",
-              "X-Csrf-Token": "QqwBBvo2rvacoaJjSGOxrfjklStTw2wqLMsYgHkaetI"
-            },
-            method: "POST"
+          fetch("/session/token", {
+            method: "GET",
+          })
+          /* Request was success the data is the server response */
+          .then(response => {
+            const csrfToken = response.text();
+            console.log(csrfToken);
+            return csrfToken;
+          }).then((csrfToken) => {
+
+            fetch("/h5p-xapi/save-events-user?_format=json", {
+              body: JSON.stringify(data),
+              headers: {
+                "Authorization": "#",
+                "Content-Type": "application/json",
+                "X-Csrf-Token": csrfToken,
+              },
+              method: "POST"
+            })
+            .then(response => {
+              if (!response.ok) {
+                  throw new Error('HTTP error ' + response.status);
+              }
+  
+              return response.json();
+          })
+          .then(data => console.log(data)) /* Request was success the data is the server response */
+          .catch(error => console.error('Error:', error));
+          
           });
 
-          console.log(event.data.statement);
         });
+
       });
     }
   };
