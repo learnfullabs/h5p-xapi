@@ -4,3 +4,44 @@
  * @file
  * Install, update and uninstall functions for H5P XAPI file.
  */
+
+ /**
+ * Implements hook_schema().
+ */
+function h5p_xapi_schema() {
+  $schema['h5p_xapi_rawdata'] = [
+    'description' => 'Stores raw data for the H5P XAPI Events.',
+    'fields' => [
+      'event_id' => [
+        'description' => 'Event ID of the H5P XAPI event emitted and stored',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'nid' => [
+        'description' => 'The node id (nid) of the node that emits the H5P XAPI event',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'uid' => [
+        'description' => 'The user id (uid) of the user who is interacting with the H5P resource and emits the events.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'timestamp' => [
+        'description' => 'The timestamp of the last request with that path and language.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+    ],
+    'primary key' => ['event_id'],
+  ];
+
+  return $schema;
+}
