@@ -32,6 +32,12 @@ function h5p_xapi_schema() {
         'not null' => TRUE,
         'default' => 0,
       ],
+      'event_data' => [
+        'description' => 'The user id (uid) of the user who is interacting with the H5P resource and emits the events.',
+        'type' => 'blob',
+        'size' => 'big',
+        'not null' => TRUE,
+      ],
       'timestamp' => [
         'description' => 'The timestamp of the last request with that path and language.',
         'type' => 'int',

@@ -93,6 +93,7 @@ class H5PXAPISaveEventsUser extends ResourceBase {
    */
   public function post($data) {
     $response_status = TRUE;
+    $connection = \Drupal::service('database');
 
     // Use current user after pass authentication to validate access.
     if (!$this->currentUser->isAuthenticated()) {
@@ -134,8 +135,21 @@ class H5PXAPISaveEventsUser extends ResourceBase {
     $node_id = $data['node_id'];
 
     /* At this point we can process the data */
-    file_put_contents("/tmp/inputdata-" . $user_id . "-" . $node_id, json_encode($data["h5p_event"]));
-    
+    /* Initial saving of the Event Object in the MySQL Drupal DB */
+    /* TODO: Save this in a MongoDB DB */
+    try {
+      $result = $connection->insert('h5p_xapi_rawdata')
+      ->fields([
+        'nid' =>  $node_id,
+        'uid' => $user_id,
+        'event_data' => json_encode($data["h5p_event"]),
+        'timestamp' => \Drupal::time()->getRequestTime(),
+      ])
+      ->execute();
+    } catch (\Exception $e) {
+      watchdog_exception('h5p_xapi', $e);
+    }
+
     $response = new ResourceResponse($response_status);
 
     return $response;
