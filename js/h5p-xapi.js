@@ -24,10 +24,6 @@
             h5p_event: event.data.statement
           };
       
-          /* TODO
-           * 
-           * - Get session cookie (somehow)
-           * - Change "Authorization" to "Cookie" */
           fetch("/session/token", {
             method: "GET",
           })
@@ -37,11 +33,10 @@
             console.log(csrfToken);
             return csrfToken;
           }).then((csrfToken) => {
-
             fetch("/h5p-xapi/save-events-user?_format=json", {
               body: JSON.stringify(data),
               headers: {
-                "Authorization": "#",
+                // We don't need this header if user is logged in => "Authorization": "Basic ####",
                 "Content-Type": "application/json",
                 "X-Csrf-Token": csrfToken,
               },
