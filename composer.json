@@ -21,8 +21,8 @@
       "drupal/core": "^10"
     },
     "require-dev": {
-      "drupal/group": "^3.2",
       "drupal/key": "^1.17",
-      "drupal/restui": "^1.21"
+      "drupal/restui": "^1.21",
+      "drupal/view_custom_table": "^2.0"
     }
   }
