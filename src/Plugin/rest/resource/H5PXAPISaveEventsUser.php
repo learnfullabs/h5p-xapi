@@ -44,6 +44,14 @@ class H5PXAPISaveEventsUser extends ResourceBase {
    */
   protected $entityTypeManager;
 
+ 
+  /**
+   * The database connection.
+   *
+   * @var \Drupal\Core\Database\Connection
+   */
+  protected $database;
+
   /**
    * Constructs a Drupal\rest\Plugin\ResourceBase object.
    *
@@ -61,11 +69,14 @@ class H5PXAPISaveEventsUser extends ResourceBase {
    *   A current user instance.
    * @param \Drupal\Core\Entity\EntityTypeManagerInterface $entity_type_manager
    *   The entity type manager.
+   * @param \Drupal\Core\Database\Connection $database
+   *  The database connection.
    */
   public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, AccountProxyInterface $current_user, EntityTypeManagerInterface $entity_type_manager) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->currentUser = $current_user;
     $this->entityTypeManager = $entity_type_manager;
+    $this->database = $database;
   }
 
   /**
@@ -80,6 +91,7 @@ class H5PXAPISaveEventsUser extends ResourceBase {
       $container->get('logger.factory')->get('custom_rest'),
       $container->get('current_user'),
       $container->get('entity_type.manager'),
+      $container->get('database')
     );
   }
 
@@ -93,7 +105,6 @@ class H5PXAPISaveEventsUser extends ResourceBase {
    */
   public function post($data) {
     $response_status = TRUE;
-    $connection = \Drupal::service('database');
 
     // Use current user after pass authentication to validate access.
     if (!$this->currentUser->isAuthenticated()) {
@@ -138,7 +149,7 @@ class H5PXAPISaveEventsUser extends ResourceBase {
     /* Initial saving of the Event Object in the MySQL Drupal DB */
     /* TODO: Save this in a MongoDB DB */
     try {
-      $result = $connection->insert('h5p_xapi_rawdata')
+      $result = $this->database->query->insert('h5p_xapi_rawdata')
       ->fields([
         'nid' =>  $node_id,
         'uid' => $user_id,
