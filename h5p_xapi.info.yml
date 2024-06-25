@@ -7,4 +7,4 @@ dependencies:
   - 'drupal:h5p'
   - 'drupal:restui'
   - 'drupal:serialization'
-  - 'drupal/view_custom_table'
+  - 'drupal:view_custom_table'
