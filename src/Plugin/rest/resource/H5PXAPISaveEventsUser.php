@@ -15,6 +15,7 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use Drupal\rest\ModifiedResourceResponse;
+use Drupal\Core\Database\Connection;
 
 /**
  * Provides a Save Events User Endpoint
@@ -72,7 +73,7 @@ class H5PXAPISaveEventsUser extends ResourceBase {
    * @param \Drupal\Core\Database\Connection $database
    *  The database connection.
    */
-  public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, AccountProxyInterface $current_user, EntityTypeManagerInterface $entity_type_manager) {
+  public function __construct(array $configuration, $plugin_id, $plugin_definition, array $serializer_formats, LoggerInterface $logger, AccountProxyInterface $current_user, EntityTypeManagerInterface $entity_type_manager, Connection $database) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
     $this->currentUser = $current_user;
     $this->entityTypeManager = $entity_type_manager;
@@ -149,7 +150,7 @@ class H5PXAPISaveEventsUser extends ResourceBase {
     /* Initial saving of the Event Object in the MySQL Drupal DB */
     /* TODO: Save this in a MongoDB DB */
     try {
-      $result = $this->database->query->insert('h5p_xapi_rawdata')
+      $result = $this->database->insert('h5p_xapi_rawdata')
       ->fields([
         'nid' =>  $node_id,
         'uid' => $user_id,

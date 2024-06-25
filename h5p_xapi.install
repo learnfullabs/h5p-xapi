@@ -9,6 +9,7 @@
  * Implements hook_schema().
  */
 function h5p_xapi_schema() {
+  /* This table keeps the raw data from the H5P Event */
   $schema['h5p_xapi_rawdata'] = [
     'description' => 'Stores raw data for the H5P XAPI Events.',
     'fields' => [
@@ -47,6 +48,222 @@ function h5p_xapi_schema() {
       ],
     ],
     'primary key' => ['event_id'],
+  ];
+
+  $schema["h5p_xapi_event_actor"] = [
+    'description' => 'Stores the Event Author info for each event.',
+    'fields' => [
+      'event_id' => [
+        'description' => 'Event ID of the H5P XAPI event emitted and stored',
+        'type' => 'int',
+        'size' => 'long',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'name' => [
+        'description' => 'Username, actor->name property',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'mailbox' => [
+        'description' => 'E-mail, actor->mbox property',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'timestamp' => [
+        'description' => 'The timestamp of the last request with that path and language.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+    ],
+    'primary key' => ['event_id'],
+    'foreign keys' => [
+      'data_rawdata' => [
+        'table' => 'h5p_xapi_rawdata',
+        'columns' => [
+          'event_id' => 'event_id',
+        ],
+      ],
+    ],
+  ];
+  
+  $schema["h5p_xapi_event_object"] = [
+    'description' => 'Stores the Event Author info for each event.',
+    'fields' => [
+      'event_id' => [
+        'description' => 'Event ID of the H5P XAPI event emitted and stored',
+        'type' => 'int',
+        'size' => 'long',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'object_id' => [
+        'description' => 'Object ID, should be an URL, object->id property',
+        'type' => 'text',
+        'size' => 'medium',
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'object_type' => [
+        'description' => 'Object type, object->type property',
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'name' => [
+        'description' => 'Name of the activity, object->name->en-US',
+        'type' => 'varchar',
+        'length' => 255,
+        'default' => '',
+      ],
+      'description' => [
+        'description' => 'Description of the activity, object->description->en-US',
+        'type' => 'varchar',
+        'length' => 255,
+        'default' => '',
+      ],
+      'type' => [
+        'description' => 'Object type, should be an URL, object->type property',
+        'type' => 'text',
+        'size' => 'medium',
+        'default' => '',
+      ],
+      'interaction_type' => [
+        'description' => 'Interaction type, object->interactionType property',
+        'type' => 'varchar',
+        'size' => '200',
+        'default' => '',
+      ],
+      'correct_esponses_pattern' => [
+        'description' => 'Pattern with corrected responses',
+        'type' => 'text',
+        'size' => 'medium',
+        'default' => '',
+      ],
+      'timestamp' => [
+        'description' => 'The timestamp of the last request with that path and language.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+    ],
+    'primary key' => ['event_id'],
+    'foreign keys' => [
+      'data_rawdata' => [
+        'table' => 'h5p_xapi_rawdata',
+        'columns' => [
+          'event_id' => 'event_id',
+        ],
+      ],
+    ],
+  ];
+
+  $schema["h5p_xapi_event_context"] = [
+    'description' => 'Saves the object context information.',
+    'fields' => [
+      'event_id' => [
+        'description' => 'Event ID of the H5P XAPI event emitted and stored',
+        'type' => 'int',
+        'size' => 'long',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'parent_id' => [
+        'description' => 'parent->id, this is an url',
+        'type' => 'text',
+        'size' => 'medium',
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'category_id' => [
+        'description' => 'category->id, this is an url',
+        'type' => 'text',
+        'size' => 'medium',
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'extensions' => [
+        'description' => 'This is an URL',
+        'type' => 'text',
+        'size' => 'medium',
+        'not null' => TRUE,
+        'default' => '',
+      ],
+      'timestamp' => [
+        'description' => 'The timestamp of the last request with that path and language.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+    ],
+    'primary key' => ['event_id'],
+    'foreign keys' => [
+      'data_rawdata' => [
+        'table' => 'h5p_xapi_rawdata',
+        'columns' => [
+          'event_id' => 'event_id',
+        ],
+      ],
+    ],
+  ];
+
+  $schema["h5p_xapi_event_result"] = [
+    'fields' => [
+      'event_id' => [
+        'description' => 'Event ID of the H5P XAPI event emitted and stored',
+        'type' => 'int',
+        'size' => 'long',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ],
+      'completion' => [
+        'description' => 'bool to indicate if the activity was completed or not',
+        'type' => 'bool',
+        'default' => '',
+      ],
+      'success' => [
+        'description' => 'bool to indicate if the activity was completed successfully or not',
+        'type' => 'bool',
+        'default' => '',
+      ],
+      'duration' => [
+        'description' => 'Duration of the activity.',
+        'type' => 'varchar',
+        'size' => '30',
+        'default' => "",
+      ],
+      'response' => [
+        'description' => 'Response given by the user.',
+        'type' => 'text',
+        'size' => 'medium',
+        'default' => "",
+      ],
+      'timestamp' => [
+        'description' => 'The timestamp of the last request with that path and language.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+    ],
+    'primary key' => ['event_id'],
+    'foreign keys' => [
+      'data_rawdata' => [
+        'table' => 'h5p_xapi_rawdata',
+        'columns' => [
+          'event_id' => 'event_id',
+        ],
+      ],
+    ],
   ];
 
   return $schema;
