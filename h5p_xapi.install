@@ -93,7 +93,7 @@ function h5p_xapi_schema() {
   ];
   
   $schema["h5p_xapi_event_object"] = [
-    'description' => 'Stores the Event Author info for each event.',
+    'description' => 'Stores the Event Object info for each event.',
     'fields' => [
       'event_id' => [
         'description' => 'Event ID of the H5P XAPI event emitted and stored',

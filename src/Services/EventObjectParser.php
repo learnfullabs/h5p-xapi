@@ -1,15 +1,13 @@
 <?php
 
-namespace Drupal\quiz\Services;
+namespace Drupal\h5p_xapi\Services;
 
-use Drupal\quiz\Entity\Quiz;
-use Drupal\quiz\Entity\QuizResult;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 /**
- * Default implementation of the quiz session.
+ * Default implementation of the Event Object Parser.
  */
-class QuizSession implements QuizSessionInterface {
+class EventObjectParser implements EventObjectParserInterface {
 
   /**
    * The session.

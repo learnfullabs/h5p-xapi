@@ -15,29 +15,30 @@ interface EventObjectInterface {
   const TEMP_ID = 'temp';
 
   /**
-   * Determine if the current user user has a result for this quiz or a
-   * temporary quiz in the session.
+   * Save Event Data in the h5p_xapi_rawdata table for initial review
    *
-   * @param Quiz $quiz
-   *   The quiz.
+   * @param object $event_data
+   *   The event data.
    */
-  public function isTakingQuiz(Quiz $quiz = NULL);
+  public function saveRawData($event_data = NULL);
 
   /**
-   * Put a quiz result into the current user's session.
+   * Save Event Author Data (the user interacting with the h5p object) in the
+   * h5p_xapi_event_actor table
    *
-   * @param QuizResult $quiz_result
-   *   The quiz result.
+   * @param object $event_data
+   *   The event data.
    */
-  public function startQuiz(QuizResult $quiz_result);
+  public function saveEventAuthorData($event_data = NULL);
 
   /**
-   * Remove quiz from session
+   * Save Event Object Data (information about the H5P Object) in the
+   * h5p_xapi_event_object table
    *
-   * @param Quiz $quiz
-   *   The quiz.
+   * @param object $event_data
+   *   The event data.
    */
-  public function removeQuiz(Quiz $quiz);
+  public function saveEventObjectData(Quiz $quiz);
 
   /**
    * Get the current user's result for a Quiz in the session
