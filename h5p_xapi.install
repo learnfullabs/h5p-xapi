@@ -106,7 +106,6 @@ function h5p_xapi_schema() {
         'type' => 'text',
         'size' => 'medium',
         'not null' => TRUE,
-        'default' => '',
       ],
       'object_type' => [
         'description' => 'Object type, object->type property',
@@ -131,7 +130,6 @@ function h5p_xapi_schema() {
         'description' => 'Object type, should be an URL, object->type property',
         'type' => 'text',
         'size' => 'medium',
-        'default' => '',
       ],
       'interaction_type' => [
         'description' => 'Interaction type, object->interactionType property',
@@ -143,7 +141,6 @@ function h5p_xapi_schema() {
         'description' => 'Pattern with corrected responses',
         'type' => 'text',
         'size' => 'medium',
-        'default' => '',
       ],
       'timestamp' => [
         'description' => 'The timestamp of the last request with that path and language.',
@@ -178,21 +175,18 @@ function h5p_xapi_schema() {
         'type' => 'text',
         'size' => 'medium',
         'not null' => TRUE,
-        'default' => '',
       ],
       'category_id' => [
         'description' => 'category->id, this is an url',
         'type' => 'text',
         'size' => 'medium',
         'not null' => TRUE,
-        'default' => '',
       ],
       'extensions' => [
         'description' => 'This is an URL',
         'type' => 'text',
         'size' => 'medium',
         'not null' => TRUE,
-        'default' => '',
       ],
       'timestamp' => [
         'description' => 'The timestamp of the last request with that path and language.',
