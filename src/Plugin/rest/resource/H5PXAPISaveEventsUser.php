@@ -104,7 +104,6 @@ class H5PXAPISaveEventsUser extends ResourceBase {
    *   Throws exception expected.
    */
   public function post($data) {
-    $response_status = TRUE;
 
     // Use current user after pass authentication to validate access.
     if (!$this->currentUser->isAuthenticated()) {
@@ -145,11 +144,14 @@ class H5PXAPISaveEventsUser extends ResourceBase {
     /** @var \Drupal\h5p_xapi\Services\EventObjectParserInterface $event_object_parser */
     $event_object_parser = \Drupal::service('h5p_xapi.event_object_parser');
 
+    $user_id = $data["user_id"];
+    $node_id = $data["node_id"];
+
     if (!$event_object_parser->saveEventRawData($user_id, $node_id, $data["h5p_event"])){
-      $this->logger->error("Error when saving the Raw Data, check database logger table for more information.");
+      throw new BadRequestHttpException('Error when saving the Raw Data, check database logger table for more information."');
     }
 
-    $response = new ResourceResponse($response_status);
+    $response = new ResourceResponse("Event Data saved with success !");
 
     return $response;
   }

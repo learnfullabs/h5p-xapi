@@ -50,7 +50,7 @@
               return response.json();
           })
           .then(data => console.log(data)) /* Request was success the data is the server response */
-          .catch(error => console.error('Error:', error));
+          .catch(error => console.error(error));
           
           });
 

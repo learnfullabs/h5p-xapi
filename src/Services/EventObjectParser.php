@@ -4,6 +4,7 @@ namespace Drupal\h5p_xapi\Services;
 
 use Drupal\Core\Database\Connection;
 use Psr\Log\LoggerInterface;
+use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Messenger\MessengerInterface;
 
 /**
@@ -72,4 +73,31 @@ class EventObjectParser implements EventObjectParserInterface {
     return TRUE;
   }
 
+  /**
+   * {@inheritdoc}
+   */
+  public function saveEventAuthorData($user_id, $node_id, $event_data = NULL) {
+    return TRUE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function saveEventObjectData($user_id, $node_id, $event_data = NULL) {
+    return TRUE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function saveEventContextData($user_id, $node_id, $event_data = NULL) {
+    return TRUE;
+  }
+
+  /**
+   * {@inheritdoc}
+   */
+  public function saveEventResultData($user_id, $node_id, $event_data = NULL) {
+    return TRUE;
+  }
 }
