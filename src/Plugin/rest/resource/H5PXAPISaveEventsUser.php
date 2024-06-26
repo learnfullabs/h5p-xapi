@@ -44,7 +44,6 @@ class H5PXAPISaveEventsUser extends ResourceBase {
    * @var \Drupal\Core\Entity\EntityTypeManagerInterface
    */
   protected $entityTypeManager;
-
  
   /**
    * The database connection.
@@ -143,23 +142,11 @@ class H5PXAPISaveEventsUser extends ResourceBase {
       throw new BadRequestHttpException('User does not exist, check your user_id.');
     }
 
-    $user_id = $data['user_id'];
-    $node_id = $data['node_id'];
+    /** @var \Drupal\h5p_xapi\Services\EventObjectParserInterface $event_object_parser */
+    $event_object_parser = \Drupal::service('h5p_xapi.event_object_parser');
 
-    /* At this point we can process the data */
-    /* Initial saving of the Event Object in the MySQL Drupal DB */
-    /* TODO: Save this in a MongoDB DB */
-    try {
-      $result = $this->database->insert('h5p_xapi_rawdata')
-      ->fields([
-        'nid' =>  $node_id,
-        'uid' => $user_id,
-        'event_data' => json_encode($data["h5p_event"]),
-        'timestamp' => \Drupal::time()->getRequestTime(),
-      ])
-      ->execute();
-    } catch (\Exception $e) {
-      watchdog_exception('h5p_xapi', $e);
+    if (!$event_object_parser->saveEventRawData($user_id, $node_id, $data["h5p_event"])){
+      $this->logger->error("Error when saving the Raw Data, check database logger table for more information.");
     }
 
     $response = new ResourceResponse($response_status);

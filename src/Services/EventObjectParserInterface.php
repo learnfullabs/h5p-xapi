@@ -6,21 +6,17 @@ namespace Drupal\h5p_xapi\Services;
  * Parse the Event Object and save the parsed data in DB tables.
  *
  */
-interface EventObjectInterface {
-
-  const RESULT_ID = 'result_id';
-
-  const CURRENT_QUESTION = 'current_question';
-
-  const TEMP_ID = 'temp';
+interface EventObjectParserInterface {
 
   /**
    * Save Event Data in the h5p_xapi_rawdata table for initial review
    *
    * @param object $event_data
    *   The event data.
+   * @return bool
+   *   TRUE on success or FALSE on error
    */
-  public function saveRawData($event_data = NULL);
+  public function saveEventRawData($user_id, $node_id, $event_data = NULL);
 
   /**
    * Save Event Author Data (the user interacting with the h5p object) in the
@@ -29,7 +25,7 @@ interface EventObjectInterface {
    * @param object $event_data
    *   The event data.
    */
-  public function saveEventAuthorData($event_data = NULL);
+  public function saveEventAuthorData($user_id, $node_id, $event_data = NULL);
 
   /**
    * Save Event Object Data (information about the H5P Object) in the
@@ -38,58 +34,24 @@ interface EventObjectInterface {
    * @param object $event_data
    *   The event data.
    */
-  public function saveEventObjectData(Quiz $quiz);
+  public function saveEventObjectData($user_id, $node_id, $event_data = NULL);
 
   /**
-   * Get the current user's result for a Quiz in the session
+   * Save Event Context Data (Context information about the H5P interaction) in the
+   * h5p_xapi_event_context table
    *
-   * @param Quiz $quiz
-   *   The quiz.
+   * @param object $event_data
+   *   The event data.
    */
-  public function getResult(Quiz $quiz = NULL);
+  public function saveEventContextData($user_id, $node_id, $event_data = NULL);
 
   /**
-   * Get the current user's temporary result ID (for feedback/review).
+   * Save Event Result Data (Result information about the H5P interaction) in the
+   * h5p_xapi_event_result table
    *
+   * @param object $event_data
+   *   The event data.
    */
-  public function getTemporaryResult();
-
-  /**
-   * Set a quiz result for the current user.
-   *
-   * @param QuizResult $quiz_result
-   *   The quiz result.
-   */
-  public function setResult(QuizResult $quiz_result);
-
-  /**
-   * Set the user's temporary result ID (for feedback/review).
-   *
-   * @param QuizResult $quiz_result
-   *   The quiz result.
-   */
-  public function setTemporaryResult(QuizResult $quiz_result);
-
-  /**
-   * Get the user's current question index for a quiz in the session.
-   *
-   * @param Quiz $quiz
-   *   The quiz.
-   *
-   * @return int
-   *   Question index starting at 1.
-   */
-  public function getCurrentQuestion(Quiz $quiz);
-
-  /**
-   * Set the user's current question.
-   *
-   * @param Quiz $quiz
-   *   The quiz ID.
-   *
-   * @param int $current_question
-   *   The current question, starting at 1.
-   */
-  public function setCurrentQuestion(Quiz $quiz, int $current_question);
+  public function saveEventResultData($user_id, $node_id, $event_data = NULL);
 
 }

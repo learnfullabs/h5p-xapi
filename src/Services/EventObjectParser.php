@@ -2,7 +2,9 @@
 
 namespace Drupal\h5p_xapi\Services;
 
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Drupal\Core\Database\Connection;
+use Psr\Log\LoggerInterface;
+use Drupal\Core\Messenger\MessengerInterface;
 
 /**
  * Default implementation of the Event Object Parser.
@@ -10,149 +12,64 @@ use Symfony\Component\HttpFoundation\Session\SessionInterface;
 class EventObjectParser implements EventObjectParserInterface {
 
   /**
-   * The session.
+   * The logger channel factory service.
    *
-   * @var SessionInterface
+   * @var \Drupal\Core\Logger\LoggerChannelInterface
    */
-  protected $session;
+  protected $logger;
 
   /**
-   * Constructs a new QuizSession object.
+   * The messenger.
    *
-   * @param SessionInterface $session
-   *   The session.
+   * @var \Drupal\Core\Messenger\MessengerInterface
    */
-  public function __construct(SessionInterface $session) {
-    $this->session = $session;
-  }
+  protected $messenger;
 
-  /**
-   * {@inheritdoc}
-   */
-  public function isTakingQuiz(Quiz $quiz = NULL) {
-    return (bool) $this->getResult($quiz);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function startQuiz(QuizResult $quiz_result) {
-    $current_quizzes = $this->getCurrentQuizzes();
-    $current_quizzes[$quiz_result->getQuiz()->id()][self::RESULT_ID] = $quiz_result->id();
-    $current_quizzes[$quiz_result->getQuiz()->id()][self::CURRENT_QUESTION] = 1;
-    $this->setCurrentQuizzes($current_quizzes);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function removeQuiz(Quiz $quiz) {
-    $current_quizzes = $this->getCurrentQuizzes();
-    unset($current_quizzes[$quiz->id()]);
-    $this->setCurrentQuizzes($current_quizzes);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getResult(Quiz $quiz = NULL) {
-    $current_quizzes = $this->getCurrentQuizzes();
-    if ($quiz && isset($current_quizzes[$quiz->id()]) && !empty($current_quizzes[$quiz->id()][self::RESULT_ID])) {
-      $result_id = $current_quizzes[$quiz->id()][self::RESULT_ID];
-      return QuizResult::load($result_id);
-    }
-
-    return NULL;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getTemporaryResult() {
-    $current_quizzes = $this->getCurrentQuizzes();
-    if (!empty($current_quizzes[self::TEMP_ID])) {
-      $result_id = $current_quizzes[self::TEMP_ID];
-      return QuizResult::load($result_id);
-    }
-
-    return NULL;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setResult(QuizResult $quiz_result) {
-    $current_quizzes = $this->getCurrentQuizzes();
-    $current_quizzes[$quiz_result->getQuiz()->id()][self::RESULT_ID] = $quiz_result->id();
-    $this->setCurrentQuizzes($current_quizzes);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setTemporaryResult(QuizResult $quiz_result) {
-    $current_quizzes = $this->getCurrentQuizzes();
-    $current_quizzes[self::TEMP_ID] = $quiz_result->id();
-    $this->setCurrentQuizzes($current_quizzes);
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function getCurrentQuestion(Quiz $quiz) {
-    $current_quizzes = $this->getCurrentQuizzes();
-    if (isset($current_quizzes[$quiz->id()])) {
-      return !empty($current_quizzes[$quiz->id()][self::CURRENT_QUESTION]) ? $current_quizzes[$quiz->id()][self::CURRENT_QUESTION] : NULL;
-    }
-    return NULL;
-  }
-
-  /**
-   * {@inheritdoc}
-   */
-  public function setCurrentQuestion(Quiz $quiz, int $current_question) {
-    $current_quizzes = $this->getCurrentQuizzes();
-    if (isset($current_quizzes[$quiz->id()])) {
-      $current_quizzes[$quiz->id()][self::CURRENT_QUESTION] = $current_question;
-      $this->setCurrentQuizzes($current_quizzes);
-    }
-  }
-
-  /**
-   * Gets the current quizzes the user is taking
+    /**
+   * The database connection.
    *
-   * @return array
-   *   The quizzes
+   * @var \Drupal\Core\Database\Connection
    */
-  protected function getCurrentQuizzes() {
-    $key = $this->getSessionKey();
-    return $this->session->get($key, []);
+  protected $database;
+
+  /**
+   * Constructs a new Event Object Parser object.
+   *
+   * @param \Psr\Log\LoggerInterface $logger
+   *   A logger instance.
+   * @param \Drupal\Core\Messenger\MessengerInterface $messenger
+   *   The messenger.
+   * @param \Drupal\Core\Database\Connection $database
+   *   The database connection.
+   */
+  public function __construct(LoggerChannelFactoryInterface $logger, MessengerInterface $messenger, Connection $database) {
+    $this->logger = $logger->get('h5p_xapi');
+    $this->database = $database;
+    $this->messenger = $messenger;
   }
 
   /**
-   * Gets the current quizzes the user is taking
-   *
-   * @return array
-   *   The quizzes
+   * {@inheritdoc}
    */
-  protected function setCurrentQuizzes(array $current_quizzes) {
-    $key = $this->getSessionKey();
-    if (sizeOf($current_quizzes) == 0) {
-      $this->session->remove($key);
+  public function saveEventRawData($user_id, $node_id, $event_data = NULL) {
+    /* At this point we can process the data */
+    /* Initial saving of the Event Object in the MySQL Drupal DB */
+    /* TODO: Save this in a MongoDB DB */
+    try {
+      $result = $this->database->insert('h5p_xapi_rawdata')
+      ->fields([
+        'nid' =>  $node_id,
+        'uid' => $user_id,
+        'event_data' => json_encode($event_data),
+        'timestamp' => \Drupal::time()->getRequestTime(),
+      ])
+      ->execute();
+    } catch (\Exception $e) {
+      watchdog_exception('h5p_xapi', $e);
+      return FALSE;
     }
-    else {
-      $this->session->set($key, $current_quizzes);
-    }
-  }
 
-  /**
-   * Gets the session key for the quiz session type.
-   *
-   * @return string
-   *   The session key.
-   */
-  protected function getSessionKey() {
-    return 'quiz';
+    return TRUE;
   }
 
 }
