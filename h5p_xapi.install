@@ -237,7 +237,6 @@ function h5p_xapi_schema() {
         'description' => 'Response given by the user.',
         'type' => 'text',
         'size' => 'medium',
-        'default' => "",
       ],
       'timestamp' => [
         'description' => 'The timestamp of the last request with that path and language.',
