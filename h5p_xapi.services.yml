@@ -1,0 +1,4 @@
+services:
+  h5p_xapi.event_object_parser:
+    class: Drupal\h5p_xapi\Services\EventObjectParser
+    arguments: ['@entity_type.manager']

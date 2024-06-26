@@ -56,7 +56,6 @@ function h5p_xapi_schema() {
       'event_id' => [
         'description' => 'Event ID of the H5P XAPI event emitted and stored',
         'type' => 'int',
-        'size' => 'long',
         'unsigned' => TRUE,
         'not null' => TRUE,
       ],
@@ -99,7 +98,6 @@ function h5p_xapi_schema() {
       'event_id' => [
         'description' => 'Event ID of the H5P XAPI event emitted and stored',
         'type' => 'int',
-        'size' => 'long',
         'unsigned' => TRUE,
         'not null' => TRUE,
       ],
@@ -138,7 +136,7 @@ function h5p_xapi_schema() {
       'interaction_type' => [
         'description' => 'Interaction type, object->interactionType property',
         'type' => 'varchar',
-        'size' => '200',
+        'length' => 255,
         'default' => '',
       ],
       'correct_esponses_pattern' => [
@@ -172,7 +170,6 @@ function h5p_xapi_schema() {
       'event_id' => [
         'description' => 'Event ID of the H5P XAPI event emitted and stored',
         'type' => 'int',
-        'size' => 'long',
         'unsigned' => TRUE,
         'not null' => TRUE,
       ],
@@ -221,24 +218,25 @@ function h5p_xapi_schema() {
       'event_id' => [
         'description' => 'Event ID of the H5P XAPI event emitted and stored',
         'type' => 'int',
-        'size' => 'long',
         'unsigned' => TRUE,
         'not null' => TRUE,
       ],
       'completion' => [
         'description' => 'bool to indicate if the activity was completed or not',
-        'type' => 'bool',
-        'default' => '',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'default' => 0,
       ],
       'success' => [
         'description' => 'bool to indicate if the activity was completed successfully or not',
-        'type' => 'bool',
-        'default' => '',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'default' => 0,
       ],
       'duration' => [
         'description' => 'Duration of the activity.',
         'type' => 'varchar',
-        'size' => '30',
+        'length' => '30',
         'default' => "",
       ],
       'response' => [
