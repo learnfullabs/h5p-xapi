@@ -6,6 +6,7 @@
  */
 
  use \Drupal\Core\Entity\EntityInterface;
+ use Drupal\views\ViewExecutable;
 
  /**
  * Implements hook_page_attachments().
@@ -41,4 +42,17 @@ function h5p_xapi_preprocess_page(&$variables) {
 
   $variables['page']['#cache']['contexts'][] = 'h5pxapi';
   $variables['page']['#cache']['contexts'][] = 'url';
+}
+
+/**
+ * Implements hook_views_pre_build().
+ */
+function h5p_xapi_views_pre_build(ViewExecutable $view) {
+  $user = \Drupal::currentUser();
+
+  if ($view->id() == 'h5p_xapi_rawdata' && $view->getDisplay()->display['id'] == 'page_1') {
+    if ($user) {
+      $view->args[0] = $user->id();
+    }
+  }
 }
