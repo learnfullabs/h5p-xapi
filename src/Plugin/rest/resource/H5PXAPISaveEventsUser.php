@@ -163,6 +163,10 @@ class H5PXAPISaveEventsUser extends ResourceBase {
       throw new BadRequestHttpException('Error when saving the Event Context Data, check database logger table for more information."');
     }
 
+    if (!$event_object_parser->saveEventResultData($event_id, $user_id, $node_id, $data["h5p_event"])){
+      throw new BadRequestHttpException('Error when saving the Event Result Data, check database logger table for more information."');
+    }
+
     $response = new ResourceResponse("Event Data saved with success !");
 
     return $response;

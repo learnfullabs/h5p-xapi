@@ -164,12 +164,27 @@ class EventObjectParser implements EventObjectParserInterface {
       return FALSE;
     }
 
-    if (isset($event_data["object"]) && !empty($event_data["object"])) {
+    if (isset($event_data["context"]) && !empty($event_data["context"])) {
       $event_context = (object) $event_data["context"];
       $event_context_activities = (object) $event_context->contextActivities;
-      $event_context_parent_id = $event_context_activities->parent["0"]["id"];
-      $event_context_category_id = $event_context_activities->category["0"]["id"];
-      $event_content_extensions = $event_context->extensions["http://id.tincanapi.com/extension/ending-point"];
+      $event_context_parent_id = $event_context_activities->parent["0"]["id"] ?? "";
+      $event_context_category_id = $event_context_activities->category["0"]["id"] ?? "";
+      $event_content_extensions = $event_context->extensions["http://id.tincanapi.com/extension/ending-point"] ?? "";
+    
+      try {
+        $result = $this->database->insert('h5p_xapi_event_context')
+        ->fields([
+          'event_id' => $event_id,
+          'parent_id' => $event_context_parent_id,
+          'category_id' => $event_context_category_id,
+          'extensions' => $event_content_extensions,
+          'timestamp' => \Drupal::time()->getRequestTime(),
+        ])
+        ->execute();
+      } catch (\Exception $e) {
+        watchdog_exception('h5p_xapi', $e);
+        return FALSE;
+      }
     } else {
       return FALSE;
     }
@@ -181,6 +196,49 @@ class EventObjectParser implements EventObjectParserInterface {
    * {@inheritdoc}
    */
   public function saveEventResultData($event_id, $user_id, $node_id, $event_data = NULL) {
+    if ($event_id === NULL) {
+      return FALSE;
+    }
+
+    /* if $event_data["result"] is not set, it doesn't mean there
+     * was an issue with the call, this array is only set when the
+     * user clicks to validate the result */
+    if (isset($event_data["result"]) && !empty($event_data["result"])) {
+      $event_result = (object) $event_data["result"];
+      $event_result_completion = $event_result->completion ?? 0;
+      
+      if ($event_result->success === TRUE) {
+        $event_result_success = 1;
+      } else {
+        $event_result_success = 0;
+      }
+
+      $event_result_duration = $event_result->duration ?? "";
+      $event_result_response = $event_result->response ?? "";
+
+      try {
+        $result = $this->database->insert('h5p_xapi_event_result')
+        ->fields([
+          'event_id' => $event_id,
+          'completion' => $event_result_completion,
+          'success' => $event_result_success,
+          'duration' => $event_result_duration,
+          'response' => $event_result_response,
+          'timestamp' => \Drupal::time()->getRequestTime(),
+        ])
+        ->execute();
+      } catch (\Exception $e) {
+        watchdog_exception('h5p_xapi', $e);
+        return FALSE;
+      }
+    } else {
+      if (isset($event_data["object"]) && !empty($event_data["object"])) {
+        return TRUE;
+      } else {
+        return FALSE;
+      }
+    }
+
     return TRUE;
   }
 }
