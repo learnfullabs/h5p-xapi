@@ -14,6 +14,8 @@
         let userId = drupalSettings.h5pxapi.userId;
         let nodeId = drupalSettings.h5pxapi.nodeId;
 
+        /* TODO: Check if userId or nodeId are empty, if so, stop execution (return FALSE) */
+
         H5P.externalDispatcher.on('xAPI', function (event) {
           /* TODO
            *

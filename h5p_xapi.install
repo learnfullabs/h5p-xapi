@@ -137,7 +137,7 @@ function h5p_xapi_schema() {
         'length' => 255,
         'default' => '',
       ],
-      'correct_esponses_pattern' => [
+      'correct_responses_pattern' => [
         'description' => 'Pattern with corrected responses',
         'type' => 'text',
         'size' => 'medium',
