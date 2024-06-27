@@ -250,6 +250,7 @@ function h5p_xapi_schema() {
   ];
 
   $schema["h5p_xapi_event_result"] = [
+    'description' => 'Saves the Event Result information per user.',
     'fields' => [
       'event_id' => [
         'description' => 'Event ID of the H5P XAPI event emitted and stored',
