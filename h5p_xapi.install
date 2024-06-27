@@ -59,6 +59,20 @@ function h5p_xapi_schema() {
         'unsigned' => TRUE,
         'not null' => TRUE,
       ],
+      'nid' => [
+        'description' => 'The node id (nid) of the node that emits the H5P XAPI event',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'uid' => [
+        'description' => 'The user id (uid) of the user who is interacting with the H5P resource and emits the events.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
       'name' => [
         'description' => 'Username, actor->name property',
         'type' => 'varchar',
@@ -100,6 +114,20 @@ function h5p_xapi_schema() {
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
+      ],
+      'nid' => [
+        'description' => 'The node id (nid) of the node that emits the H5P XAPI event',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'uid' => [
+        'description' => 'The user id (uid) of the user who is interacting with the H5P resource and emits the events.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
       ],
       'object_id' => [
         'description' => 'Object ID, should be an URL, object->id property',
@@ -170,6 +198,20 @@ function h5p_xapi_schema() {
         'unsigned' => TRUE,
         'not null' => TRUE,
       ],
+      'nid' => [
+        'description' => 'The node id (nid) of the node that emits the H5P XAPI event',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'uid' => [
+        'description' => 'The user id (uid) of the user who is interacting with the H5P resource and emits the events.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
       'parent_id' => [
         'description' => 'parent->id, this is an url',
         'type' => 'text',
@@ -214,6 +256,20 @@ function h5p_xapi_schema() {
         'type' => 'int',
         'unsigned' => TRUE,
         'not null' => TRUE,
+      ],
+      'nid' => [
+        'description' => 'The node id (nid) of the node that emits the H5P XAPI event',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'uid' => [
+        'description' => 'The user id (uid) of the user who is interacting with the H5P resource and emits the events.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
       ],
       'completion' => [
         'description' => 'bool to indicate if the activity was completed or not',

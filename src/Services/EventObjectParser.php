@@ -100,6 +100,8 @@ class EventObjectParser implements EventObjectParserInterface {
       $result = $this->database->insert('h5p_xapi_event_actor')
       ->fields([
         'event_id' => $event_id,
+        'nid' =>  $node_id,
+        'uid' => $user_id,
         'name' => $actor_name,
         'mailbox' => $actor_mbox,
         'timestamp' => \Drupal::time()->getRequestTime(),
@@ -136,6 +138,8 @@ class EventObjectParser implements EventObjectParserInterface {
         $result = $this->database->insert('h5p_xapi_event_object')
         ->fields([
           'event_id' => $event_id,
+          'nid' =>  $node_id,
+          'uid' => $user_id,
           'object_id' => $event_object_type,
           'name' => $event_object_name,
           'description' => $event_object_description,
@@ -175,6 +179,8 @@ class EventObjectParser implements EventObjectParserInterface {
         $result = $this->database->insert('h5p_xapi_event_context')
         ->fields([
           'event_id' => $event_id,
+          'nid' =>  $node_id,
+          'uid' => $user_id,
           'parent_id' => $event_context_parent_id,
           'category_id' => $event_context_category_id,
           'extensions' => $event_content_extensions,
@@ -220,6 +226,8 @@ class EventObjectParser implements EventObjectParserInterface {
         $result = $this->database->insert('h5p_xapi_event_result')
         ->fields([
           'event_id' => $event_id,
+          'nid' =>  $node_id,
+          'uid' => $user_id,
           'completion' => $event_result_completion,
           'success' => $event_result_success,
           'duration' => $event_result_duration,
