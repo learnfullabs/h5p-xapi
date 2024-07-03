@@ -150,8 +150,8 @@ function h5p_xapi_schema() {
       ],
       'description' => [
         'description' => 'Description of the activity, object->description->en-US',
-        'type' => 'varchar',
-        'length' => 255,
+        'type' => 'text',
+        'size' => 'medium',
         'default' => '',
       ],
       'type' => [

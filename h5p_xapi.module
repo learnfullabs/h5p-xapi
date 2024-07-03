@@ -55,4 +55,22 @@ function h5p_xapi_views_pre_build(ViewExecutable $view) {
       $view->args[0] = $user->id();
     }
   }
+
+  if ($view->id() == 'h5p_xapi_event_actor' && $view->getDisplay()->display['id'] == 'page_1') {
+    if ($user) {
+      $view->args[0] = $user->id();
+    }
+  }
+
+  if ($view->id() == 'h5p_xapi_event_object_data' && $view->getDisplay()->display['id'] == 'page_1') {
+    if ($user) {
+      $view->args[0] = $user->id();
+    }
+  }
+
+  if ($view->id() == 'h5p_xapi_event_result_data' && $view->getDisplay()->display['id'] == 'page_1') {
+    if ($user) {
+      $view->args[0] = $user->id();
+    }
+  }
 }
