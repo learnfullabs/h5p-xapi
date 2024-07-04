@@ -34,7 +34,7 @@ function h5p_xapi_schema() {
         'default' => 0,
       ],
       'event_data' => [
-        'description' => 'The user id (uid) of the user who is interacting with the H5P resource and emits the events.',
+        'description' => 'The Event JSON Raw Data',
         'type' => 'text',
         'size' => 'big',
         'not null' => TRUE,
@@ -152,7 +152,6 @@ function h5p_xapi_schema() {
         'description' => 'Description of the activity, object->description->en-US',
         'type' => 'text',
         'size' => 'medium',
-        'default' => '',
       ],
       'type' => [
         'description' => 'Object type, should be an URL, object->type property',
