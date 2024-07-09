@@ -49,12 +49,7 @@ function h5p_xapi_preprocess_page(&$variables) {
  */
 function h5p_xapi_views_pre_build(ViewExecutable $view) {
   $user = \Drupal::currentUser();
-
-  if ($view->id() == 'h5p_xapi_rawdata' && $view->getDisplay()->display['id'] == 'page_1') {
-    if ($user) {
-      $view->args[0] = $user->id();
-    }
-  }
+  $node = \Drupal::routeMatch()->getParameter('node');
 
   if ($view->id() == 'h5p_xapi_event_actor' && $view->getDisplay()->display['id'] == 'page_1') {
     if ($user) {
