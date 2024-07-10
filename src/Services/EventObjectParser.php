@@ -123,6 +123,13 @@ class EventObjectParser implements EventObjectParserInterface {
       return FALSE;
     }
 
+    /* Let's get the 'verb' information first and save it */
+    if (isset($event_data["verb"]) && !empty($event_data["verb"])) {
+      $verb_object = (object) $event_data["verb"];
+      $verb_object_id = $verb_object->id ?? "";
+      $verb_object_name = $verb_object->display["en-US"] ?? "";
+    }
+
     if (isset($event_data["object"]) && !empty($event_data["object"])) {
       $event_object = (object) $event_data["object"];
       $event_object_id = $event_object->id;
@@ -141,6 +148,8 @@ class EventObjectParser implements EventObjectParserInterface {
           'nid' =>  $node_id,
           'uid' => $user_id,
           'object_id' => $event_object_type,
+          'verb_id' => $verb_object_id,
+          'verb_name' => $verb_object_name,
           'name' => $event_object_name,
           'description' => $event_object_description,
           'type' => $event_object_type,
@@ -213,10 +222,21 @@ class EventObjectParser implements EventObjectParserInterface {
       $event_result = (object) $event_data["result"];
       $event_result_completion = $event_result->completion ?? 0;
       
-      if ($event_result->success === TRUE) {
-        $event_result_success = 1;
+      if (isset($event_result->success) && !empty($event_result->success)) {
+        if ($event_result->success === TRUE) {
+          $event_result_success = 1;
+        } else {
+          $event_result_success = 0;
+        }
       } else {
         $event_result_success = 0;
+      }
+
+      if (isset($event_result->score) && !empty($event_result->score)) {
+        $result_min = $event_result->score["min"] ?? 0;
+        $result_max = $event_result->score["max"] ?? 0;
+        $result_scored = $event_result->score["raw"] ?? 0;
+        $result_scaled = $event_result->score["scaled"] ?? 0.0;
       }
 
       $event_result_duration = $event_result->duration ?? "";
@@ -231,6 +251,10 @@ class EventObjectParser implements EventObjectParserInterface {
           'completion' => $event_result_completion,
           'success' => $event_result_success,
           'duration' => $event_result_duration,
+          'result_min' => $result_min,
+          'result_max' => $result_max,
+          'result_scored' => $result_scored,
+          'result_scaled' => $result_scaled,
           'response' => $event_result_response,
           'timestamp' => \Drupal::time()->getRequestTime(),
         ])

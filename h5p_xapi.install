@@ -142,6 +142,16 @@ function h5p_xapi_schema() {
         'not null' => TRUE,
         'default' => '',
       ],
+      'verb_id' => [
+        'description' => 'Verb ID of the type of interaction: progressed, completed, etc',
+        'type' => 'text',
+        'size' => 'medium',
+      ],
+      'verb_name' => [
+        'description' => 'Type of interaction: progressed, completed, etc',
+        'type' => 'text',
+        'size' => 'medium',
+      ],
       'name' => [
         'description' => 'Name of the activity, object->name->en-US',
         'type' => 'varchar',
@@ -288,6 +298,34 @@ function h5p_xapi_schema() {
         'type' => 'varchar',
         'length' => '30',
         'default' => "",
+      ],
+      'result_min' => [
+        'description' => 'Minimum result possible that the user can get during the test',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'result_max' => [
+        'description' => 'Maximum result possible that the user can get during the test',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'result_scored' => [
+        'description' => 'Result scored by the user on this test',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
+      'result_scaled' => [
+        'description' => 'Scaled result scored by the user on this test',
+        'type' => 'float',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
       ],
       'response' => [
         'description' => 'Response given by the user.',
