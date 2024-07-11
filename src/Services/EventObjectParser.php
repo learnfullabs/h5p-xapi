@@ -6,6 +6,7 @@ use Drupal\Core\Database\Connection;
 use Psr\Log\LoggerInterface;
 use Drupal\Core\Logger\LoggerChannelFactoryInterface;
 use Drupal\Core\Messenger\MessengerInterface;
+use Drupal\node\Entity\Node;
 
 /**
  * Default implementation of the Event Object Parser.
@@ -242,12 +243,18 @@ class EventObjectParser implements EventObjectParserInterface {
       $event_result_duration = $event_result->duration ?? "";
       $event_result_response = $event_result->response ?? "";
 
+      /* Get the H5P Resource's owner */
+      $node = Node::load($node_id);
+      $author = $node->getOwner();
+      $author_id = $author->id();
+
       try {
         $result = $this->database->insert('h5p_xapi_event_result')
         ->fields([
           'event_id' => $event_id,
           'nid' =>  $node_id,
           'uid' => $user_id,
+          'owner_id' => $author_id,
           'completion' => $event_result_completion,
           'success' => $event_result_success,
           'duration' => $event_result_duration,

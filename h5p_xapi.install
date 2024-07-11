@@ -281,6 +281,13 @@ function h5p_xapi_schema() {
         'not null' => TRUE,
         'default' => 0,
       ],
+      'owner_id' => [
+        'description' => 'User ID of the user who owns the H5P Resource that triggered the resource. This is different from the uid field.',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ],
       'completion' => [
         'description' => 'bool to indicate if the activity was completed or not',
         'type' => 'int',
