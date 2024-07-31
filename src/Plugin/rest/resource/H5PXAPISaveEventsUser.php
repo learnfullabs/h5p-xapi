@@ -148,23 +148,23 @@ class H5PXAPISaveEventsUser extends ResourceBase {
     $node_id = $data["node_id"];
 
     if (!($event_id = $event_object_parser->saveEventRawData($user_id, $node_id, $data["h5p_event"]))){
-      throw new BadRequestHttpException('Error when saving the Raw Data, check database logger table for more information."');
+      throw new BadRequestHttpException('Error when saving the Raw Data, check database logger table for more information.');
     }
 
     if (!$event_object_parser->saveEventAuthorData($event_id, $user_id, $node_id, $data["h5p_event"])){
-      throw new BadRequestHttpException('Error when saving the Author Data, check database logger table for more information."');
+      throw new BadRequestHttpException('Error when saving the Author Data, check database logger table for more information.');
     }
 
     if (!$event_object_parser->saveEventObjectData($event_id, $user_id, $node_id, $data["h5p_event"])){
-      throw new BadRequestHttpException('Error when saving the Event Object Data, check database logger table for more information."');
+      throw new BadRequestHttpException('Error when saving the Event Object Data, check database logger table for more information.');
     }
 
     if (!$event_object_parser->saveEventContextData($event_id, $user_id, $node_id, $data["h5p_event"])){
-      throw new BadRequestHttpException('Error when saving the Event Context Data, check database logger table for more information."');
+      throw new BadRequestHttpException('Error when saving the Event Context Data, check database logger table for more information.');
     }
 
     if (!$event_object_parser->saveEventResultData($event_id, $user_id, $node_id, $data["h5p_event"])){
-      throw new BadRequestHttpException('Error when saving the Event Result Data, check database logger table for more information."');
+      throw new BadRequestHttpException('Error when saving the Event Result Data, check database logger table for more information.');
     }
 
     $response = new ResourceResponse("Event Data saved with success !");
