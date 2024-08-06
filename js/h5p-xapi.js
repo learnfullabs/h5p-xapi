@@ -14,7 +14,6 @@
         let userId = drupalSettings.h5pxapi.userId;
         let nodeId = drupalSettings.h5pxapi.nodeId;
         
-
         /* TODO: Check if userId or nodeId are empty, if so, stop execution (return FALSE) */
         if (userId == 0) {
           return;
